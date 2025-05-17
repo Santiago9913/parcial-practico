@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { AirlineEntity } from 'src/airline/airline.entity';
-import { AirportEntity } from 'src/airport/airport.entity';
+import { AirlineEntity } from '../airline/airline.entity';
+import { AirportEntity } from '../airport/airport.entity';
 import { In, Repository } from 'typeorm';
 
 @Injectable()
@@ -14,9 +14,15 @@ export class AirlineAirportService {
     private airportRepository: Repository<AirportEntity>,
   ) {}
 
-  async addAirportToAirline(airlineId: string, airportId: string) {
-    const airline = await this.airlineRepository.findOneBy({
-      id: airlineId,
+  async addAirportToAirline(
+    airlineId: string,
+    airportId: string,
+  ): Promise<AirlineEntity> {
+    const airline = await this.airlineRepository.findOne({
+      where: { id: airlineId },
+      relations: {
+        airports: true,
+      },
     });
     const airport = await this.airportRepository.findOneBy({
       id: airportId,
@@ -34,7 +40,9 @@ export class AirlineAirportService {
   async findAirportsFromAirline(airlineId: string) {
     const airline = await this.airlineRepository.findOne({
       where: { id: airlineId },
-      relations: ['airports'],
+      relations: {
+        airports: true,
+      },
     });
 
     if (!airline) {
@@ -107,7 +115,13 @@ export class AirlineAirportService {
       throw new Error('Airline not found');
     }
 
-    airline.airports = [];
+    if (airline.airports.length === 0) {
+      throw new Error('Airline has no airports');
+    }
+    airline.airports = airline.airports.filter(
+      (airport) => airport.id !== airline.airports[0].id,
+    );
+
     return await this.airlineRepository.save(airline);
   }
 }
