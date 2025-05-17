@@ -1,4 +1,4 @@
-import { AirlineEntity } from 'src/ariline/airline.entity';
+import { AirlineEntity } from 'src/airline/airline.entity';
 import {
   Column,
   Entity,
