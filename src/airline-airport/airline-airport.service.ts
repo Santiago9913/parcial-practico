@@ -18,6 +18,10 @@ export class AirlineAirportService {
     airlineId: string,
     airportId: string,
   ): Promise<AirlineEntity> {
+    if (!airportId) {
+      throw new Error('Airport ID cannot be null or undefined');
+    }
+
     const airline = await this.airlineRepository.findOne({
       where: { id: airlineId },
       relations: {
@@ -77,6 +81,9 @@ export class AirlineAirportService {
   }
 
   async updateAirportsFromAirline(airlineId: string, airportIds: string[]) {
+    if (!airportIds || airportIds.length === 0) {
+      throw new Error('Airport IDs cannot be null or empty');
+    }
     const airline = await this.airlineRepository.findOne({
       where: {
         id: airlineId,
@@ -101,7 +108,10 @@ export class AirlineAirportService {
     return await this.airlineRepository.save(airline);
   }
 
-  async deleteAirportFromAirline(airlineId: string) {
+  async deleteAirportFromAirline(airlineId: string, airportId: string) {
+    if (!airportId) {
+      throw new Error('Airport ID cannot be null or undefined');
+    }
     const airline = await this.airlineRepository.findOne({
       where: {
         id: airlineId,
@@ -119,7 +129,7 @@ export class AirlineAirportService {
       throw new Error('Airline has no airports');
     }
     airline.airports = airline.airports.filter(
-      (airport) => airport.id !== airline.airports[0].id,
+      (airport) => airport.id !== airportId,
     );
 
     return await this.airlineRepository.save(airline);

@@ -34,16 +34,12 @@ export class AirportService {
       throw new Error('Airport not found');
     }
 
-    const code = airport.code;
+    existingAirport.name = airport.name;
+    existingAirport.code = airport.code;
+    existingAirport.country = airport.country;
+    existingAirport.city = airport.city;
 
-    if (code.length !== 3) {
-      throw new Error('Airport code must be exactly 3 characters long');
-    }
-
-    return await this.airportRepository.save({
-      ...existingAirport,
-      ...airport,
-    });
+    return await this.airportRepository.save(existingAirport);
   }
 
   async delete(id: string): Promise<void> {

@@ -1,27 +1,30 @@
 import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
 import { AirlineAirportService } from './airline-airport.service';
+import { FindOneParam } from '../shared/params/findOneParam';
+import { AirlineAirportDto } from './airline-airport.dto';
 
-@Controller('airline')
+@Controller('airlines')
 export class AirlineAirportController {
   constructor(private readonly airlineAirportService: AirlineAirportService) {}
 
-  @Put(':airlineId/airport')
+  @Put(':id/airport')
   async addAirportToAriline(
-    @Param('airlineId') airlineId: string,
-    @Body() airportId: string,
+    @Param() { id: airlineId }: FindOneParam,
+    @Body() airlineAirportDto: AirlineAirportDto,
   ) {
+    const { airportId } = airlineAirportDto;
     return await this.airlineAirportService.addAirportToAirline(
       airlineId,
       airportId,
     );
   }
 
-  @Get(':airlineId/airports')
-  async findAirportsFromAirline(@Param('airlineId') airlineId: string) {
+  @Get(':id/airports')
+  async findAirportsFromAirline(@Param() { id: airlineId }: FindOneParam) {
     return await this.airlineAirportService.findAirportsFromAirline(airlineId);
   }
 
-  @Get(':airlineId/airport/:airportId')
+  @Get(':airlineId/airports/:airportId')
   async findAirportFromAirline(
     @Param('airlineId') airlineId: string,
     @Param('airportId') airportId: string,
@@ -32,19 +35,27 @@ export class AirlineAirportController {
     );
   }
 
-  @Put(':airlineId/airports')
+  @Put(':id/airports')
   async updateAirportsFromAirline(
-    @Param('airlineId') airlineId: string,
-    @Body() airportsIds: string[],
+    @Param() { id }: FindOneParam,
+    @Body() airlineAirportDto: AirlineAirportDto,
   ) {
+    const { airportsIds } = airlineAirportDto;
     return await this.airlineAirportService.updateAirportsFromAirline(
-      airlineId,
+      id,
       airportsIds,
     );
   }
 
-  @Delete(':airlineId/airport/')
-  async removeAirportFromAirline(@Param('airlineId') airlineId: string) {
-    return await this.airlineAirportService.deleteAirportFromAirline(airlineId);
+  @Delete(':id/airports')
+  async removeAirportFromAirline(
+    @Param() { id }: FindOneParam,
+    @Body() airlineAirportDto: AirlineAirportDto,
+  ) {
+    const { airportId } = airlineAirportDto;
+    return await this.airlineAirportService.deleteAirportFromAirline(
+      id,
+      airportId,
+    );
   }
 }

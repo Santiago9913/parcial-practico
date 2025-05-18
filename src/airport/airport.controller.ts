@@ -12,8 +12,9 @@ import { AirportService } from './airport.service';
 import { AirportDto } from './airport.dto';
 import { AirportEntity } from './airport.entity';
 import { plainToInstance } from 'class-transformer';
+import { FindOneParam } from '../shared/params/findOneParam';
 
-@Controller('airport')
+@Controller('airports')
 export class AirportController {
   constructor(private readonly airportService: AirportService) {}
 
@@ -23,7 +24,7 @@ export class AirportController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  async findOne(@Param() { id }: FindOneParam) {
     return await this.airportService.findOne(id);
   }
 
@@ -35,14 +36,14 @@ export class AirportController {
   }
 
   @Put(':id')
-  async update(@Param('id') id: string, @Body() airportDto: AirportDto) {
+  async update(@Param() { id }: FindOneParam, @Body() airportDto: AirportDto) {
     const airport: AirportEntity = plainToInstance(AirportEntity, airportDto);
     return await this.airportService.update(id, airport);
   }
 
   @Delete(':id')
   @HttpCode(204)
-  async delete(@Param('id') id: string) {
+  async delete(@Param() { id }: FindOneParam) {
     return await this.airportService.delete(id);
   }
 }
