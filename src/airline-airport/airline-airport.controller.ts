@@ -1,4 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Put } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  Param,
+  Put,
+} from '@nestjs/common';
 import { AirlineAirportService } from './airline-airport.service';
 import { FindOneParam } from '../shared/params/findOneParam';
 import { AirlineAirportDto } from './airline-airport.dto';
@@ -48,6 +56,7 @@ export class AirlineAirportController {
   }
 
   @Delete(':id/airports')
+  @HttpCode(204)
   async removeAirportFromAirline(
     @Param() { id }: FindOneParam,
     @Body() airlineAirportDto: AirlineAirportDto,

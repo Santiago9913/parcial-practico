@@ -1,0 +1,1554 @@
+{
+	"info": {
+		"_postman_id": "c8efa5f7-ade9-4145-bb5e-752254a64ebc",
+		"name": "Parcial",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "9051835",
+		"_collection_link": "https://miso22-2167.postman.co/workspace/APIS~ee029b75-23ce-42bb-a03d-140214544fb0/collection/9051835-c8efa5f7-ade9-4145-bb5e-752254a64ebc?action=share&source=collection_link&creator=9051835"
+	},
+	"item": [
+		{
+			"name": "Airlines",
+			"item": [
+				{
+					"name": "Create Airline",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require(\"moment\")",
+									"",
+									"var dateToUse = moment().subtract(2, \"years\")",
+									"",
+									"pm.variables.set(\"creationDate\", dateToUse)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"airlineId\", res.id)",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomProductName}}\",\n    \"description\": \"{{$randomJobDescriptor}}\",\n    \"foundationDate\": \"{{creationDate}}\",\n    \"website\": \"{{$randomUrl}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Airline 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require(\"moment\")",
+									"",
+									"var dateToUse = moment().subtract(2, \"years\")",
+									"",
+									"pm.variables.set(\"creationDate\", dateToUse)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"airlineId2\", res.id)",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomProductName}}\",\n    \"description\": \"{{$randomJobDescriptor}}\",\n    \"foundationDate\": \"{{creationDate}}\",\n    \"website\": \"{{$randomUrl}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Invalid Airline",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require(\"moment\")",
+									"",
+									"var dateToUse = moment().add(2, \"years\")",
+									"",
+									"pm.variables.set(\"invalidDate\", dateToUse)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomProductName}}\",\n    \"description\": \"{{$randomJobDescriptor}}\",\n    \"foundationDate\": \"{{invalidDate}}\",\n    \"website\": \"{{$randomUrl}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{airlineId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Invalid Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require(\"moment\")",
+									"",
+									"var dateToUse = moment().subtract(2, \"years\")",
+									"",
+									"pm.variables.set(\"creationDate\", dateToUse)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomProductName}}\",\n    \"description\": \"{{$randomJobDescriptor}}\",\n    \"foundationDate\": \"{{creationDate}}\",\n    \"website\": \"{{$randomUrl}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{airlineId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Invalid Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const moment = require(\"moment\")",
+									"",
+									"var dateToUse = moment().subtract(2, \"years\")",
+									"",
+									"pm.variables.set(\"creationDate\", dateToUse)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomProductName}}\",\n    \"description\": \"{{$randomJobDescriptor}}\",\n    \"foundationDate\": \"{{creationDate}}\",\n    \"website\": \"{{$randomUrl}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"   pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{airlineId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Invalid Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Airports",
+			"item": [
+				{
+					"name": "Create Airport",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function generateUniqueChars(length) {",
+									"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';",
+									"  let result = '';",
+									"  const usedChars = new Set();",
+									"",
+									"  while (result.length < length) {",
+									"    const randomIndex = Math.floor(Math.random() * characters.length);",
+									"    const randomChar = characters.charAt(randomIndex);",
+									"",
+									"    if (!usedChars.has(randomChar)) {",
+									"      result += randomChar;",
+									"      usedChars.add(randomChar);",
+									"    }",
+									"  }",
+									"  return result;",
+									"}",
+									"",
+									"const randomChars = generateUniqueChars(3)",
+									"",
+									"pm.collectionVariables.set(\"code\", randomChars)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"airportId\", res.id)",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomStreetName}}\",\n    \"code\": \"{{code}}\",\n    \"country\": \"{{$randomCountry}}\",\n    \"city\": \"{{$randomCity}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Airport 2",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function generateUniqueChars(length) {",
+									"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';",
+									"  let result = '';",
+									"  const usedChars = new Set();",
+									"",
+									"  while (result.length < length) {",
+									"    const randomIndex = Math.floor(Math.random() * characters.length);",
+									"    const randomChar = characters.charAt(randomIndex);",
+									"",
+									"    if (!usedChars.has(randomChar)) {",
+									"      result += randomChar;",
+									"      usedChars.add(randomChar);",
+									"    }",
+									"  }",
+									"  return result;",
+									"}",
+									"",
+									"const randomChars = generateUniqueChars(3)",
+									"",
+									"pm.collectionVariables.set(\"code\", randomChars)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"airportId2\", res.id)",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomStreetName}}\",\n    \"code\": \"{{code}}\",\n    \"country\": \"{{$randomCountry}}\",\n    \"city\": \"{{$randomCity}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Airport 3",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function generateUniqueChars(length) {",
+									"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';",
+									"  let result = '';",
+									"  const usedChars = new Set();",
+									"",
+									"  while (result.length < length) {",
+									"    const randomIndex = Math.floor(Math.random() * characters.length);",
+									"    const randomChar = characters.charAt(randomIndex);",
+									"",
+									"    if (!usedChars.has(randomChar)) {",
+									"      result += randomChar;",
+									"      usedChars.add(randomChar);",
+									"    }",
+									"  }",
+									"  return result;",
+									"}",
+									"",
+									"const randomChars = generateUniqueChars(3)",
+									"",
+									"pm.collectionVariables.set(\"code\", randomChars)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"const res = pm.response.json()",
+									"",
+									"pm.collectionVariables.set(\"airportId3\", res.id)",
+									"",
+									"pm.test(\"Status code is 201\", function () {",
+									"   pm.response.to.have.status(201);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomStreetName}}\",\n    \"code\": \"{{code}}\",\n    \"country\": \"{{$randomCountry}}\",\n    \"city\": \"{{$randomCity}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Invalid Airport",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 400\", function () {",
+									"   pm.response.to.have.status(400);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomStreetName}}\",\n    \"code\": \"WXYZ\",\n    \"country\": \"{{$randomCountry}}\",\n    \"city\": \"{{$randomCity}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airports/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{airportId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get By Invalid Id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airports/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Airport",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"function generateUniqueChars(length) {",
+									"  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';",
+									"  let result = '';",
+									"  const usedChars = new Set();",
+									"",
+									"  while (result.length < length) {",
+									"    const randomIndex = Math.floor(Math.random() * characters.length);",
+									"    const randomChar = characters.charAt(randomIndex);",
+									"",
+									"    if (!usedChars.has(randomChar)) {",
+									"      result += randomChar;",
+									"      usedChars.add(randomChar);",
+									"    }",
+									"  }",
+									"  return result;",
+									"}",
+									"",
+									"const randomChars = generateUniqueChars(3)",
+									"",
+									"pm.collectionVariables.set(\"code\", randomChars)"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomStreetName}}\",\n    \"code\": \"{{code}}\",\n    \"country\": \"{{$randomCountry}}\",\n    \"city\": \"{{$randomCity}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{airportId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Invalid Airport",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"{{$randomStreetName}}\",\n    \"code\": \"{{code}}\",\n    \"country\": \"{{$randomCountry}}\",\n    \"city\": \"{{$randomCity}}\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airports/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Airport",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"   pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airports/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{airportId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Invalid Airport",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airports/:id",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airports",
+								":id"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "{{$guid}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Airlines-Airports",
+			"item": [
+				{
+					"name": "Add Airport To Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportId\": \"{{airportId2}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airport",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airport"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Add Invalid Airport To An Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportId\": \"{{$guid}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airport",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airport"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get all the airports of an airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get the specified airport from the airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports/:airportId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports",
+								":airportId"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								},
+								{
+									"key": "airportId",
+									"value": "{{airportId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get the airport that is not associated to the airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports/:airportId",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports",
+								":airportId"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								},
+								{
+									"key": "airportId",
+									"value": "{{airportId3}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Airports of an Airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {",
+									"   pm.response.to.have.status(200);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportsIds\": [\n        \"{{airportId3}}\"\n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Airports of an Airline With an Invalid Airport",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportsIds\": [\n        \"{{$guid}}\",\n        \"{{$guid}}\"\n        \n    ]\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete one airport from an airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 204\", function () {",
+									"   pm.response.to.have.status(204);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportId\": \"{{airportId3}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId2}}"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete one invalid airport from an airline",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 404\", function () {",
+									"   pm.response.to.have.status(404);",
+									"});"
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"airportId\": \"{{$guid}}\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{url}}/airlines/:airlineId/airports",
+							"host": [
+								"{{url}}"
+							],
+							"path": [
+								"airlines",
+								":airlineId",
+								"airports"
+							],
+							"variable": [
+								{
+									"key": "airlineId",
+									"value": "{{airlineId}}"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "http://localhost:3000",
+			"type": "string"
+		},
+		{
+			"key": "airlineId",
+			"value": ""
+		},
+		{
+			"key": "code",
+			"value": ""
+		},
+		{
+			"key": "airportId",
+			"value": ""
+		},
+		{
+			"key": "airportId2",
+			"value": ""
+		},
+		{
+			"key": "airlineId2",
+			"value": ""
+		},
+		{
+			"key": "airportId3",
+			"value": ""
+		}
+	]
+}

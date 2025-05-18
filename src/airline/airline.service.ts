@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AirlineEntity } from './airline.entity';
 import { Repository } from 'typeorm';
@@ -17,9 +17,18 @@ export class AirlineService {
 
   async findOne(id: string): Promise<AirlineEntity | null> {
     if (!id) {
-      throw new Error('ID cannot be null or undefined');
+      throw new HttpException(
+        'ID cannot be null or undefined',
+        HttpStatus.BAD_REQUEST,
+      );
     }
-    return await this.airlineRepository.findOneBy({ id });
+    try {
+      return await this.airlineRepository.findOneByOrFail({ id });
+    } catch (error) {
+      throw new HttpException('Airline not found', HttpStatus.NOT_FOUND, {
+        cause: error,
+      });
+    }
   }
 
   async create(airline: AirlineEntity): Promise<AirlineEntity> {
@@ -27,10 +36,21 @@ export class AirlineService {
     const foundationDate = DateTime.fromISO(airline.foundationDate);
 
     if (foundationDate > currentDate) {
-      throw new Error('Foundation date cannot be in the future');
+      throw new HttpException(
+        'Foundation date cannot be in the future',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
-    return await this.airlineRepository.save(airline);
+    try {
+      return await this.airlineRepository.save(airline);
+    } catch (error) {
+      throw new HttpException(
+        'Error creating airline',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 
   async update(id: string, airline: AirlineEntity): Promise<AirlineEntity> {
@@ -38,17 +58,18 @@ export class AirlineService {
       where: { id },
     });
 
-    console.log(existingAirline);
-
     if (!existingAirline) {
-      throw new Error('Airline not found');
+      throw new HttpException('Airline not found', HttpStatus.NOT_FOUND);
     }
 
     const currentDate = DateTime.now();
     const foundationDate = DateTime.fromISO(airline.foundationDate);
 
     if (foundationDate > currentDate) {
-      throw new Error('Foundation date cannot be in the future');
+      throw new HttpException(
+        'Foundation date cannot be in the future',
+        HttpStatus.BAD_REQUEST,
+      );
     }
 
     existingAirline.name = airline.name;
@@ -56,7 +77,15 @@ export class AirlineService {
     existingAirline.description = airline.description;
     existingAirline.website = airline.website;
 
-    return await this.airlineRepository.save(existingAirline);
+    try {
+      return await this.airlineRepository.save(existingAirline);
+    } catch (error) {
+      throw new HttpException(
+        'Error updating airline',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 
   async delete(id: string): Promise<void> {
@@ -64,8 +93,17 @@ export class AirlineService {
       where: { id },
     });
     if (!airline) {
-      throw new Error('Airline not found');
+      throw new HttpException('Airline not found', HttpStatus.NOT_FOUND);
     }
-    await this.airlineRepository.remove(airline);
+
+    try {
+      await this.airlineRepository.remove(airline);
+    } catch (error) {
+      throw new HttpException(
+        'Error deleting airline',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 }

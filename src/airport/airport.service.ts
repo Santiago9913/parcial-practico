@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AirportEntity } from './airport.entity';
 import { Repository } from 'typeorm';
@@ -15,7 +15,13 @@ export class AirportService {
   }
 
   async findOne(id: string): Promise<AirportEntity | null> {
-    return await this.airportRepository.findOneBy({ id });
+    try {
+      return await this.airportRepository.findOneByOrFail({ id });
+    } catch (error) {
+      throw new HttpException('Airport not found', HttpStatus.NOT_FOUND, {
+        cause: error,
+      });
+    }
   }
 
   async create(airport: AirportEntity): Promise<AirportEntity> {
@@ -29,9 +35,17 @@ export class AirportService {
   }
 
   async update(id: string, airport: AirportEntity): Promise<AirportEntity> {
-    const existingAirport = await this.findOne(id);
-    if (!existingAirport) {
-      throw new Error('Airport not found');
+    let existingAirport: AirportEntity;
+    try {
+      existingAirport = await this.airportRepository.findOneOrFail({
+        where: {
+          id,
+        },
+      });
+    } catch (error) {
+      throw new HttpException('Airport not found', HttpStatus.NOT_FOUND, {
+        cause: error,
+      });
     }
 
     existingAirport.name = airport.name;
@@ -39,14 +53,37 @@ export class AirportService {
     existingAirport.country = airport.country;
     existingAirport.city = airport.city;
 
-    return await this.airportRepository.save(existingAirport);
+    try {
+      return await this.airportRepository.save(existingAirport);
+    } catch (error) {
+      throw new HttpException(
+        'Error updating airport',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 
   async delete(id: string): Promise<void> {
-    const airport = await this.findOne(id);
-    if (!airport) {
-      throw new Error('Airport not found');
+    let airport: AirportEntity;
+    try {
+      airport = await this.airportRepository.findOneByOrFail({
+        id,
+      });
+    } catch (error) {
+      throw new HttpException('Airport not found', HttpStatus.NOT_FOUND, {
+        cause: error,
+      });
     }
-    await this.airportRepository.remove(airport);
+
+    try {
+      await this.airportRepository.remove(airport);
+    } catch (error) {
+      throw new HttpException(
+        'Error deleting airport',
+        HttpStatus.INTERNAL_SERVER_ERROR,
+        { cause: error },
+      );
+    }
   }
 }
