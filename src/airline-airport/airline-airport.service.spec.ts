@@ -73,7 +73,7 @@ describe('AirlineAirportService', () => {
       airline.name = faker.airline.airline().name;
       airline.description = faker.lorem.sentence();
       airline.website = faker.internet.url();
-      airline.foundationDate = faker.date.past();
+      airline.foundationDate = faker.date.past().toISOString();
       airline.airports = airlineAirports;
       return airline;
     });
@@ -128,11 +128,11 @@ describe('AirlineAirportService', () => {
     );
 
     expect(foundAirport).toBeDefined();
-    expect(foundAirport.id).toEqual(airport.id);
-    expect(foundAirport.name).toEqual(airport.name);
-    expect(foundAirport.city).toEqual(airport.city);
-    expect(foundAirport.country).toEqual(airport.country);
-    expect(foundAirport.code).toEqual(airport.code);
+    expect(foundAirport[0].id).toEqual(airport.id);
+    expect(foundAirport[0].name).toEqual(airport.name);
+    expect(foundAirport[0].city).toEqual(airport.city);
+    expect(foundAirport[0].country).toEqual(airport.country);
+    expect(foundAirport[0].code).toEqual(airport.code);
   });
 
   it('updates the airports from an airline', async () => {
@@ -157,7 +157,10 @@ describe('AirlineAirportService', () => {
     const airline = airlines[0];
     const airport = airline.airports[0];
 
-    const updatedAirline = await service.deleteAirportFromAirline(airline.id);
+    const updatedAirline = await service.deleteAirportFromAirline(
+      airline.id,
+      airport.id,
+    );
 
     expect(updatedAirline).toBeDefined();
     expect(updatedAirline.id).toEqual(airline.id);

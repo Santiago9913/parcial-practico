@@ -89,11 +89,15 @@ export class AirlineService {
   }
 
   async delete(id: string): Promise<void> {
-    const airline = await this.airlineRepository.findOne({
-      where: { id },
-    });
-    if (!airline) {
-      throw new HttpException('Airline not found', HttpStatus.NOT_FOUND);
+    let airline: AirlineEntity;
+    try {
+      airline = await this.airlineRepository.findOneOrFail({
+        where: { id },
+      });
+    } catch (error) {
+      throw new HttpException('Airline not found', HttpStatus.NOT_FOUND, {
+        cause: error,
+      });
     }
 
     try {

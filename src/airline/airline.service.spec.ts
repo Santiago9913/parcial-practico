@@ -34,7 +34,7 @@ describe('AirlineService', () => {
       airline.name = faker.airline.airline().name;
       airline.description = faker.lorem.sentence();
       airline.website = faker.internet.url();
-      airline.foundationDate = faker.date.past();
+      airline.foundationDate = faker.date.past().toDateString();
       airline.airports = [];
       return airline;
     });
@@ -68,7 +68,7 @@ describe('AirlineService', () => {
     airline.name = faker.airline.airline().name;
     airline.description = faker.lorem.sentence();
     airline.website = faker.internet.url();
-    airline.foundationDate = faker.date.past();
+    airline.foundationDate = faker.date.past().toDateString();
 
     const createdAirline = await service.create(airline);
     expect(createdAirline).toBeDefined();
@@ -84,7 +84,7 @@ describe('AirlineService', () => {
     airline.name = faker.airline.airline().name;
     airline.description = faker.lorem.sentence();
     airline.website = faker.internet.url();
-    airline.foundationDate = faker.date.past();
+    airline.foundationDate = faker.date.past().toDateString();
 
     const updatedAirline = await service.update(airline.id, airline);
     expect(updatedAirline).toBeDefined();
@@ -98,7 +98,9 @@ describe('AirlineService', () => {
   it('deletes an airline', async () => {
     const airline = airlines[0];
     await service.delete(airline.id);
-    const foundAirline = await service.findOne(airline.id);
+    const foundAirline = await repository.findOneBy({
+      id: airline.id,
+    });
     expect(foundAirline).toBeNull();
   });
 });

@@ -169,20 +169,29 @@ export class AirlineAirportService {
         },
         where: {
           id: airlineId,
-          airports: {
-            id: airportId,
-          },
         },
       });
     } catch (error) {
-      const message = `Airline with ID ${airlineId} does not have an airport with ID ${airportId}`;
+      const message = `Airline with ID ${airlineId} does not exists`;
       throw new HttpException(message, HttpStatus.NOT_FOUND, {
         cause: error,
       });
     }
 
     if (airline.airports.length === 0) {
-      throw new HttpException('Airline has no airports', HttpStatus.NOT_FOUND);
+      throw new HttpException(
+        'Airline does not have any airports',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+
+    if (
+      airline.airports.find((airport) => airport.id === airportId) === undefined
+    ) {
+      throw new HttpException(
+        `Airline with ID ${airlineId} does not have an airport with ID ${airportId}`,
+        HttpStatus.NOT_FOUND,
+      );
     }
 
     airline.airports = airline.airports.filter(
